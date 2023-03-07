@@ -5,19 +5,14 @@ END
 
 USE Pokemon2;
 
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Type' AND type = 'U')
-BEGIN
-    CREATE TABLE Type(
-        Type_1 NVARCHAR(8) NOT NULL,
-        Type_2 NVARCHAR(8),
-    );
-END
+
 
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Regions' AND type = 'U')
 BEGIN
     CREATE TABLE Regions(
         Nom_region NVARCHAR(8) NOT NULL PRIMARY KEY,
-        Nom_ville NVARCHAR(30) NOT NULL
+        Nom_ville NVARCHAR(30) NOT NULL,
+		CONSTRAINT UC_Number UNIQUE (Nom_region)
     );
 END
 
@@ -26,6 +21,7 @@ BEGIN
     CREATE TABLE Generations(
         Gen_number INT NOT NULL PRIMARY KEY,
         Nom_region NVARCHAR(8) NOT NULL,
+		CONSTRAINT UC_Number UNIQUE (Gen_number),
         FOREIGN KEY(Nom_region) REFERENCES Regions
     );
 END
@@ -44,8 +40,21 @@ BEGIN
         Sp_Attack INT NOT NULL,
         Sp_Defense INT NOT NULL,
         Speed INT NOT NULL,
+		CONSTRAINT UC_Number UNIQUE (Pokemon_number),
         FOREIGN KEY(Gen_number) REFERENCES Generations
     );
+END
+
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Type' AND type = 'U')
+BEGIN
+    CREATE TABLE Type(
+Type_id INT IDENTITY(1,1) PRIMARY KEY,
+Type_1 NVARCHAR(8) NOT NULL,
+Type_2 NVARCHAR(8),
+CONSTRAINT UC_Type UNIQUE (Type_1, Type_2),
+CONSTRAINT FK_Pokemon_Type_1 FOREIGN KEY (Type_1) REFERENCES Type (Type_1),
+CONSTRAINT FK_Pokemon_Type_2 FOREIGN KEY (Type_2) REFERENCES Type (Type_2)
+);
 END
 
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Pokedex' AND type = 'U')
@@ -55,6 +64,7 @@ BEGIN
         Gen_number INT NOT NULL,
         Nom_Pokemon NVARCHAR(255) NOT NULL,
         Pokemon_number INT NOT NULL,
+		CONSTRAINT UC_Number UNIQUE (Nom_du_jeu),
         FOREIGN KEY(Gen_number) REFERENCES Generations,
         FOREIGN KEY(Pokemon_number) REFERENCES Pokemon
     );
@@ -67,6 +77,7 @@ BEGIN
         Team_type NVARCHAR(15) NOT NULL,
         Nom_du_jeu NVARCHAR(255) NOT NULL,
         Nom_region NVARCHAR(8) NOT NULL,
+		CONSTRAINT UC_Number UNIQUE (Nom),
         FOREIGN KEY(Nom_region) REFERENCES Regions,
         FOREIGN KEY(Nom_du_jeu) REFERENCES Pokedex
     );
@@ -79,6 +90,7 @@ BEGIN
         Gen_number INT NOT NULL,
         Gender NVARCHAR(15) NOT NULL,
         Team_size TINYINT NOT NULL, /*Max 6*/
+		CONSTRAINT UC_Number UNIQUE (Nom),
         FOREIGN KEY(Nom) REFERENCES Champions,
         FOREIGN KEY(Gen_number) REFERENCES Generations
     );
@@ -90,6 +102,7 @@ BEGIN
 Nom_dresseur NVARCHAR(15) NOT NULL,
 Pokemon_number INT NOT NULL,
 Pokemon_level TINYINT,
+CONSTRAINT UC_Number UNIQUE (Nom_dresseur),
 FOREIGN KEY(Nom_dresseur) REFERENCES Dresseur,
 FOREIGN KEY(Pokemon_number) REFERENCES Pokemon
 );
@@ -103,6 +116,7 @@ Lev_unlock INT NOT NULL,
 Power_cap INT,
 Accuracy INT,
 PP INT NOT NULL,
+CONSTRAINT UC_Number UNIQUE (Nom),
 Category NVARCHAR(12) NOT NULL,
 Type_cap NVARCHAR(8) NOT NULL
 );
@@ -114,6 +128,7 @@ CREATE TABLE Pokemon_Capacite(
 Pokemon_number INT NOT NULL,
 Nom NVARCHAR(15) NOT NULL,
 Level INT NOT NULL,
+CONSTRAINT UC_Number UNIQUE (Pokemon_number),
 FOREIGN KEY(Pokemon_number) REFERENCES Pokemon,
 FOREIGN KEY(Nom) REFERENCES Capacite
 );
