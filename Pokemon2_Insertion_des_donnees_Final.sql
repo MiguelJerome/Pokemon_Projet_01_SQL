@@ -1,3 +1,5 @@
+use Pokemon2
+
 -- Regions table
 INSERT INTO Regions(Nom_region, Nom_ville)
 VALUES
