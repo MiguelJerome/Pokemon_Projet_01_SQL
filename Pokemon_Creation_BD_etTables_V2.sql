@@ -24,9 +24,6 @@ BEGIN
     );
 END
 
-
-
-
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Pokemon' AND type = 'U')
 BEGIN
     CREATE TABLE Pokemon(
