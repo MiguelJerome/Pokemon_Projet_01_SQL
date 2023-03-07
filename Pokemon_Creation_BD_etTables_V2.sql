@@ -43,17 +43,6 @@ BEGIN
     );
 END
 
-IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Type' AND type = 'U')
-BEGIN
-	CREATE TABLE Type(
-		Pokemon_number INT NOT NULL,
-		Type_1 NVARCHAR(8) NOT NULL,
-		Type_2 NVARCHAR(8),
-        CONSTRAINT PK_Pokemon_Type PRIMARY KEY (Pokemon_number),
-        FOREIGN KEY(Pokemon_number) REFERENCES Pokemon(Pokemon_number)
-	);
-END
-
 IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Pokedex' AND type = 'U')
 BEGIN
     CREATE TABLE Pokedex(

@@ -37,17 +37,3 @@ VALUES
 (8, 'Torchic', 'Fire', NULL, 3, 45, 60, 40, 70, 50, 45),
 (9, 'Mudkip', 'Water', NULL, 3, 50, 70, 50, 50, 50, 40),
 (10, 'Turtwig', 'Grass', NULL, 4, 55, 68, 64, 45, 55, 31);
-
--- Type table
-INSERT INTO Type(Pokemon_number, Type_1, Type_2)
-VALUES
-(1, 'Grass', 'Poison'),
-(2, 'Fire', NULL),
-(3, 'Water', NULL),
-(4, 'Grass', NULL),
-(5, 'Fire', NULL),
-(6, 'Water', NULL),
-(7, 'Grass', NULL),
-(8, 'Fire', NULL),
-(9, 'Water', NULL),
-(10, 'Grass', NULL);
