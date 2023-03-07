@@ -37,3 +37,4 @@ VALUES
 (8, 'Torchic', 'Fire', NULL, 3, 45, 60, 40, 70, 50, 45),
 (9, 'Mudkip', 'Water', NULL, 3, 50, 70, 50, 50, 50, 40),
 (10, 'Turtwig', 'Grass', NULL, 4, 55, 68, 64, 45, 55, 31);
+
