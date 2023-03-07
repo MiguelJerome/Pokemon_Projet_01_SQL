@@ -1,87 +1,120 @@
-	CREATE DATABASE Pokemon2
-	USE Pokemon2
+IF NOT EXISTS (SELECT * FROM sys.databases WHERE name = 'Pokemon2') 
+BEGIN
+    CREATE DATABASE Pokemon2;
+END
 
+USE Pokemon2;
 
-	CREATE TABLE Type(
-		Type_1 NVARCHAR(8) NOT NULL,
-		Type_2 NVARCHAR(8),
-	);
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Type' AND type = 'U')
+BEGIN
+    CREATE TABLE Type(
+        Type_1 NVARCHAR(8) NOT NULL,
+        Type_2 NVARCHAR(8),
+    );
+END
 
-	CREATE TABLE Regions(
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Regions' AND type = 'U')
+BEGIN
+    CREATE TABLE Regions(
         Nom_region NVARCHAR(8) NOT NULL PRIMARY KEY,
-		Nom_ville NVARCHAR(30) NOT NULL
-	);
+        Nom_ville NVARCHAR(30) NOT NULL
+    );
+END
 
-	CREATE TABLE Generations(
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Generations' AND type = 'U')
+BEGIN
+    CREATE TABLE Generations(
         Gen_number INT NOT NULL PRIMARY KEY,
         Nom_region NVARCHAR(8) NOT NULL,
-		FOREIGN KEY(Nom_region) REFERENCES Regions
+        FOREIGN KEY(Nom_region) REFERENCES Regions
     );
+END
 
-	CREATE TABLE Pokemon(
-		Pokemon_number INT NOT NULL PRIMARY KEY,
-		Nom_Pokemon NVARCHAR(255) NOT NULL,
-		Type_1 NVARCHAR(8) NOT NULL,
-		Type_2 NVARCHAR(8),
-		Gen_number INT NOT NULL,
-		HP INT NOT NULL,
-		Attack INT NOT NULL,
-		Defense INT NOT NULL,
-		Sp_Attack INT NOT NULL,
-		Sp_Defense INT NOT NULL,
-		Speed INT NOT NULL,
-		FOREIGN KEY(Gen_number) REFERENCES Generations,
-	);
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Pokemon' AND type = 'U')
+BEGIN
+    CREATE TABLE Pokemon(
+        Pokemon_number INT NOT NULL PRIMARY KEY,
+        Nom_Pokemon NVARCHAR(255) NOT NULL,
+        Type_1 NVARCHAR(8) NOT NULL,
+        Type_2 NVARCHAR(8),
+        Gen_number INT NOT NULL,
+        HP INT NOT NULL,
+        Attack INT NOT NULL,
+        Defense INT NOT NULL,
+        Sp_Attack INT NOT NULL,
+        Sp_Defense INT NOT NULL,
+        Speed INT NOT NULL,
+        FOREIGN KEY(Gen_number) REFERENCES Generations
+    );
+END
 
-	CREATE TABLE Pokedex(
-		Nom_du_jeu NVARCHAR(255) NOT NULL PRIMARY KEY,
-		Gen_number INT NOT NULL,
-		Nom_Pokemon NVARCHAR(255) NOT NULL,
-		Pokemon_number INT NOT NULL,
-		FOREIGN KEY(Gen_number) REFERENCES Generations,
-		FOREIGN KEY(Pokemon_number) REFERENCES Pokemon
-	);
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Pokedex' AND type = 'U')
+BEGIN
+    CREATE TABLE Pokedex(
+        Nom_du_jeu NVARCHAR(255) NOT NULL PRIMARY KEY,
+        Gen_number INT NOT NULL,
+        Nom_Pokemon NVARCHAR(255) NOT NULL,
+        Pokemon_number INT NOT NULL,
+        FOREIGN KEY(Gen_number) REFERENCES Generations,
+        FOREIGN KEY(Pokemon_number) REFERENCES Pokemon
+    );
+END
 
-	CREATE TABLE Champions(
-		Nom NVARCHAR(15) NOT NULL PRIMARY KEY,
-		Team_type NVARCHAR(15) NOT NULL,
-		Nom_du_jeu NVARCHAR(255) NOT NULL,
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Champions' AND type = 'U')
+BEGIN
+    CREATE TABLE Champions(
+        Nom NVARCHAR(15) NOT NULL PRIMARY KEY,
+        Team_type NVARCHAR(15) NOT NULL,
+        Nom_du_jeu NVARCHAR(255) NOT NULL,
         Nom_region NVARCHAR(8) NOT NULL,
-		FOREIGN KEY(Nom_region) REFERENCES Regions,
-		FOREIGN KEY(Nom_du_jeu) REFERENCES Pokedex
-	);
+        FOREIGN KEY(Nom_region) REFERENCES Regions,
+        FOREIGN KEY(Nom_du_jeu) REFERENCES Pokedex
+    );
+END
 
-	CREATE TABLE Dresseur(
-		Nom NVARCHAR(15) NOT NULL PRIMARY KEY,
-		Gen_number INT NOT NULL,
-		Gender NVARCHAR(15) NOT NULL,
-		Team_size TINYINT NOT NULL, /*Max 6*/
-		FOREIGN KEY(Nom) REFERENCES Champions,
-		FOREIGN KEY(Gen_number) REFERENCES Generations,
-	);
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Dresseur' AND type = 'U')
+BEGIN
+    CREATE TABLE Dresseur(
+        Nom NVARCHAR(15) NOT NULL PRIMARY KEY,
+        Gen_number INT NOT NULL,
+        Gender NVARCHAR(15) NOT NULL,
+        Team_size TINYINT NOT NULL, /*Max 6*/
+        FOREIGN KEY(Nom) REFERENCES Champions,
+        FOREIGN KEY(Gen_number) REFERENCES Generations
+    );
+END
 
-	CREATE TABLE Pokemon_Dresseur(
-		Nom_dresseur NVARCHAR(15) NOT NULL,
-		Pokemon_number INT NOT NULL,
-		Pokemon_level TINYINT,
-		FOREIGN KEY(Nom_dresseur) REFERENCES Dresseur,
-		FOREIGN KEY(Pokemon_number) REFERENCES Pokemon,
-	);
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Pokemon_Dresseur' AND type = 'U')
+BEGIN
+    CREATE TABLE Pokemon_Dresseur(
+Nom_dresseur NVARCHAR(15) NOT NULL,
+Pokemon_number INT NOT NULL,
+Pokemon_level TINYINT,
+FOREIGN KEY(Nom_dresseur) REFERENCES Dresseur,
+FOREIGN KEY(Pokemon_number) REFERENCES Pokemon
+);
+END
 
-	CREATE TABLE Capacite(
-		Nom NVARCHAR(15) NOT NULL PRIMARY KEY,
-		Lev_unlock INT NOT NULL,
-		Power_cap INT,
-		Accuracy INT,
-		PP INT NOT NULL,
-		Category NVARCHAR(12) NOT NULL,
-		Type_cap NVARCHAR(8) NOT NULL,
-	);
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Capacite' AND type = 'U')
+BEGIN
+CREATE TABLE Capacite(
+Nom NVARCHAR(15) NOT NULL PRIMARY KEY,
+Lev_unlock INT NOT NULL,
+Power_cap INT,
+Accuracy INT,
+PP INT NOT NULL,
+Category NVARCHAR(12) NOT NULL,
+Type_cap NVARCHAR(8) NOT NULL
+);
+END
 
-	CREATE TABLE Pokemon_Capacite(
-		Pokemon_number INT NOT NULL,
-		Nom NVARCHAR(15) NOT NULL,
-		Level INT NOT NULL,
-		FOREIGN KEY(Pokemon_number) REFERENCES Pokemon,
-		FOREIGN KEY(Nom) REFERENCES Capacite,
-	);
+IF NOT EXISTS (SELECT * FROM sys.tables WHERE name = 'Pokemon_Capacite' AND type = 'U')
+BEGIN
+CREATE TABLE Pokemon_Capacite(
+Pokemon_number INT NOT NULL,
+Nom NVARCHAR(15) NOT NULL,
+Level INT NOT NULL,
+FOREIGN KEY(Pokemon_number) REFERENCES Pokemon,
+FOREIGN KEY(Nom) REFERENCES Capacite
+);
+END
